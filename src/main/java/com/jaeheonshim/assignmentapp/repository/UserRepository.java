@@ -1,8 +1,7 @@
 package com.jaeheonshim.assignmentapp.repository;
 
-import com.jaeheonshim.assignmentapp.User;
+import com.jaeheonshim.assignmentapp.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 

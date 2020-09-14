@@ -1,4 +1,4 @@
-package com.jaeheonshim.assignmentapp;
+package com.jaeheonshim.assignmentapp.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;

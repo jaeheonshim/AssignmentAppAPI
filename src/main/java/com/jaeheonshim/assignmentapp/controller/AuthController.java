@@ -1,7 +1,7 @@
 package com.jaeheonshim.assignmentapp.controller;
 
 import com.jaeheonshim.assignmentapp.AuthenticationRequest;
-import com.jaeheonshim.assignmentapp.User;
+import com.jaeheonshim.assignmentapp.domain.User;
 import com.jaeheonshim.assignmentapp.repository.UserRepository;
 import com.jaeheonshim.assignmentapp.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
