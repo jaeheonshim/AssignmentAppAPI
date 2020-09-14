@@ -18,6 +18,8 @@ public class User implements UserDetails {
     private String emailAddress;
     private String password;
 
+    private List<AssignmentClass> assignmentClasses = new ArrayList<>();
+
     private List<String> roles = new ArrayList<>();
 
     public User() {
@@ -58,6 +60,10 @@ public class User implements UserDetails {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public List<AssignmentClass> getAssignmentClasses() {
+        return assignmentClasses;
     }
 
     @Override

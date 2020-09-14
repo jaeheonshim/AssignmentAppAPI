@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +23,8 @@ public class AssignmentController {
     @Autowired
     private AssignmentRepository assignmentRepository;
 
-    @GetMapping("/all/{page}/{size}")
-    public ResponseEntity getAllAssignments(@PathVariable("page") int page, @PathVariable("size") int size, @AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/all")
+    public ResponseEntity getAllAssignments(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> userOptional = userRepository.findByEmailAddress(userDetails.getUsername());
         if(!userOptional.isPresent()) {
             return ResponseEntity.badRequest().build();
