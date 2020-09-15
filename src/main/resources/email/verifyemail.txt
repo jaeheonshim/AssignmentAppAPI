@@ -1,0 +1,8 @@
+Hi {name},
+
+Thanks for signing up for AssignmentApp!
+
+To start using AssignmentApp, confirm your email address using the link below:
+{verificationlink}
+
+If you didn't register for AssignmentApp or request this email, please ignore this message.

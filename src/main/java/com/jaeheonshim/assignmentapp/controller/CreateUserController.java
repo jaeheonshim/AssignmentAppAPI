@@ -3,11 +3,13 @@ package com.jaeheonshim.assignmentapp.controller;
 import com.jaeheonshim.assignmentapp.UserCreationException;
 import com.jaeheonshim.assignmentapp.domain.NewUserDao;
 import com.jaeheonshim.assignmentapp.domain.User;
+import com.jaeheonshim.assignmentapp.service.EmailVerificationService;
 import com.jaeheonshim.assignmentapp.service.UserCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,9 @@ import java.util.Map;
 public class CreateUserController {
     @Autowired
     private UserCreationService userCreationService;
+
+    @Autowired
+    private EmailVerificationService emailVerificationService;
 
     @PostMapping("/emailexists/{email}")
     public boolean emailExists(@PathVariable("email") String email) {
@@ -32,9 +37,14 @@ public class CreateUserController {
 
         try {
             return ResponseEntity.ok(userCreationService.createNewUser(newUser));
-        } catch(UserCreationException e) {
+        } catch(UserCreationException | IOException e) {
             response.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    @GetMapping("/emailverify/{token}")
+    public ResponseEntity verifyEmail(@PathVariable("token") String token) {
+        return emailVerificationService.verifyEmail(token);
     }
 }

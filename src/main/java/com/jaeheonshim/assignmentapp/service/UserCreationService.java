@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,9 @@ public class UserCreationService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailVerificationService emailVerificationService;
 
     public boolean emailExists(String email) {
         return userRepository.findByEmailAddress(email).isPresent();
@@ -32,7 +36,7 @@ public class UserCreationService {
         return password.length() >= 8;
     }
 
-    public User createNewUser(NewUserDao newUser) throws UserCreationException {
+    public User createNewUser(NewUserDao newUser) throws UserCreationException, IOException {
         if(emailExists(newUser.getEmail())) {
             throw new UserCreationException("A user with that email already exists");
         }
@@ -50,6 +54,8 @@ public class UserCreationService {
         user.setEmailAddress(newUser.getEmail());
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         user.setAccountEnabled(false);
+
+        emailVerificationService.sendEmailVerifyEmail(user.getName(), user.getEmailAddress());
 
         return userRepository.save(user);
     }
