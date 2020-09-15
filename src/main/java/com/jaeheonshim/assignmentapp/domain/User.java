@@ -1,6 +1,7 @@
 package com.jaeheonshim.assignmentapp.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,12 +16,14 @@ public class User implements UserDetails {
     private String id;
 
     private String name;
+
+    @Indexed(unique = true)
     private String emailAddress;
     private String password;
-
     private List<AssignmentClass> assignmentClasses = new ArrayList<>();
-
     private List<String> roles = new ArrayList<>();
+
+    private boolean accountEnabled;
 
     public User() {
     }
@@ -83,6 +86,30 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return accountEnabled;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAssignmentClasses(List<AssignmentClass> assignmentClasses) {
+        this.assignmentClasses = assignmentClasses;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public void setAccountEnabled(boolean accountEnabled) {
+        this.accountEnabled = accountEnabled;
     }
 }

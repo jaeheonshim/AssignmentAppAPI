@@ -27,7 +27,8 @@ public class AssignmentAppApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		repository.deleteAll();
 
-		User user = new User("Jaeheon Shim", "jaeheon287@gmail.com", "{noop}jaeheonshim");
+		User user = new User("Jaeheon Shim", "jaeheon287@gmail.com", "$2y$12$rnCEEI.MMZBAYy0tuUSJBubGCH4HKpyG968O8yAhT97XCYfTOBNSK");
+
 		repository.save(user);
 
 		assignmentRepository.save(new Assignment(user.getId(), "Test Assignment", "Testing assignment for AssignmentApp", LocalDate.now().toEpochDay(), LocalDate.now().plusWeeks(1).toEpochDay()));
