@@ -36,7 +36,7 @@ public class EmailVerificationService {
     public ResponseEntity verifyEmail(String token) {
         Map<Object, Object> response = new HashMap<>();
         if(!validateToken(token)) {
-            response.put("error", "The verification token could not be validated. This may be because the token is expired - try requesting another email verification link.");
+            response.put("error", "The verification token could not be validated. The token may be expired - try requesting another email verification link.");
             return ResponseEntity.badRequest().body(response);
         }
 

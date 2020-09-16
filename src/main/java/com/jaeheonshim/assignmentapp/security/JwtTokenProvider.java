@@ -26,7 +26,7 @@ public class JwtTokenProvider {
     private long validityInMilliseconds = 3600000;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {
@@ -81,7 +81,7 @@ public class JwtTokenProvider {
 
             return true;
         } catch(JwtException | IllegalArgumentException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 }
