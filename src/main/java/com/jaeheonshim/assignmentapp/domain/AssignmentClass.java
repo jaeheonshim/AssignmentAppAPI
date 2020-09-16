@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 
+// fucking name it "Course" next time dumbass
 public class AssignmentClass {
     @Id
     private String id = new ObjectId().toString();

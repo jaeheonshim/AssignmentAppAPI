@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface AssignmentRepository extends MongoRepository<Assignment, String> {
     public List<Assignment> findAllByUserIdOrderByDueDateAsc(String userId);
+
+    public int countAllByUserId(String userId);
 }
