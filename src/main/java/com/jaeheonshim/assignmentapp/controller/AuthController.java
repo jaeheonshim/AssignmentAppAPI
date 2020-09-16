@@ -55,6 +55,7 @@ public class AuthController {
             returnModel.put("error", "Incorrect email or password");
             return ResponseEntity.badRequest().body(returnModel);
         } catch(DisabledException e) {
+            returnModel.put("errortype", "EMAIL_NOT_VERIFIED");
             returnModel.put("error", "Your account is not activated! Please check your email for further instructions.");
             return ResponseEntity.badRequest().body(returnModel);
         } catch (AuthenticationException e) {
