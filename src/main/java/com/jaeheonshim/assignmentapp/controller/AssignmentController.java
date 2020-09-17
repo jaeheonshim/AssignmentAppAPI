@@ -82,7 +82,7 @@ public class AssignmentController {
         User user = userOptional.get();
         AssignmentStats stats = new AssignmentStats();
 
-        stats.setCompleted(assignmentRepository.findAllByUserIdAndDueDateAndCompletedTrue(user.getId(), date).size());
+        stats.setCompleted(assignmentRepository.findAllByUserIdAndCompletedTrue(user.getId()).size());
         stats.setDueTomorrow(assignmentRepository.findAllByUserIdAndDueDateAndCompletedFalse(user.getId(), date + 1).size());
         stats.setDueInWeek(assignmentRepository.findAllByUserIdAndDueDateBetweenAndCompletedFalse(user.getId(), date + 1, date + 7).size());
         stats.setLate(assignmentRepository.findAllByUserIdAndDueDateBeforeAndCompletedFalse(user.getId(), date).size());
@@ -134,6 +134,20 @@ public class AssignmentController {
             assignment.setDueDate(assignmentDto.getDueDate());
         }
 
+        assignmentRepository.save(assignment);
+
+        return ResponseEntity.ok(assignment);
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<Assignment> newAssignment(@AuthenticationPrincipal UserDetails userDetails, @RequestBody AssignmentDto assignmentDto) {
+        Optional<User> userOptional = userRepository.findByEmailAddress(userDetails.getUsername());
+
+        if(!userOptional.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Assignment assignment = new Assignment(userOptional.get().getId(), assignmentDto.getTitle(), assignmentDto.getDescription(), assignmentDto.getClassId(), assignmentDto.getAssignedDate(), assignmentDto.getDueDate());
         assignmentRepository.save(assignment);
 
         return ResponseEntity.ok(assignment);

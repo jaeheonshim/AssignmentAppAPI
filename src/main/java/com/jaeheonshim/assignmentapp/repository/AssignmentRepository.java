@@ -19,4 +19,6 @@ public interface AssignmentRepository extends MongoRepository<Assignment, String
     public List<Assignment> findAllByUserIdAndDueDateBetweenAndCompletedFalse(String userId, long start, long end);
 
     public List<Assignment> findAllByUserIdAndDueDateBeforeAndCompletedFalse(String userId, long duedate);
+
+    public List<Assignment> findAllByUserIdAndCompletedTrue(String userId);
 }

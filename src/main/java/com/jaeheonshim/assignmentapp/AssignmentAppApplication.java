@@ -44,9 +44,9 @@ public class AssignmentAppApplication implements CommandLineRunner {
 		for(int i = 0; i < 5; i++) {
 			LocalDate dueDate;
 			if(Math.random() > 0.5) {
-				dueDate = LocalDate.now();
+				dueDate = LocalDate.now().minusDays(1);
 			} else {
-				dueDate = LocalDate.now().plusDays(3);
+				dueDate = LocalDate.now().plusDays(1);
 			}
 			assignmentRepository.save(new Assignment(user.getId(), "Test Assignment #" + i, "Testing assignment for AssignmentApp", assignmentClass.getId(), dueDate.toEpochDay(), dueDate.toEpochDay()));
 		}
