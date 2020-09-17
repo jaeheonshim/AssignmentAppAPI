@@ -1,9 +1,6 @@
 package com.jaeheonshim.assignmentapp.controller;
 
-import com.jaeheonshim.assignmentapp.domain.Assignment;
-import com.jaeheonshim.assignmentapp.domain.AssignmentDto;
-import com.jaeheonshim.assignmentapp.domain.AssignmentListOptionsDto;
-import com.jaeheonshim.assignmentapp.domain.User;
+import com.jaeheonshim.assignmentapp.domain.*;
 import com.jaeheonshim.assignmentapp.repository.AssignmentRepository;
 import com.jaeheonshim.assignmentapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +69,26 @@ public class AssignmentController {
         response.put("assignments", assignments);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/stats/{date}")
+    public ResponseEntity<AssignmentStats> getAssignmentStats(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int date) {
+        Optional<User> userOptional = userRepository.findByEmailAddress(userDetails.getUsername());
+
+        if(!userOptional.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User user = userOptional.get();
+        AssignmentStats stats = new AssignmentStats();
+
+        stats.setCompleted(assignmentRepository.findAllByUserIdAndDueDateAndCompletedTrue(user.getId(), date).size());
+        stats.setDueTomorrow(assignmentRepository.findAllByUserIdAndDueDateAndCompletedFalse(user.getId(), date + 1).size());
+        stats.setDueInWeek(assignmentRepository.findAllByUserIdAndDueDateBetweenAndCompletedFalse(user.getId(), date + 1, date + 7).size());
+        stats.setLate(assignmentRepository.findAllByUserIdAndDueDateBeforeAndCompletedFalse(user.getId(), date).size());
+        stats.setDueToday(assignmentRepository.findAllByUserIdAndDueDateAndCompletedFalse(user.getId(), date).size());
+
+        return ResponseEntity.ok(stats);
     }
 
     @PostMapping("/save/{id}")

@@ -41,14 +41,14 @@ public class AssignmentAppApplication implements CommandLineRunner {
 		user.getAssignmentClasses().add(assignmentClass);
 		repository.save(user);
 
-		for(int i = 0; i < 34; i++) {
+		for(int i = 0; i < 5; i++) {
 			LocalDate dueDate;
 			if(Math.random() > 0.5) {
-				dueDate = LocalDate.now().minusDays(1);
+				dueDate = LocalDate.now();
 			} else {
 				dueDate = LocalDate.now().plusDays(3);
 			}
-			assignmentRepository.save(new Assignment(user.getId(), "Test Assignment #" + i, "Testing assignment for AssignmentApp", assignmentClass.getId(), dueDate.atStartOfDay().toEpochSecond(OffsetDateTime.now().getOffset()), dueDate.minusDays(1).atStartOfDay().toEpochSecond(OffsetDateTime.now().getOffset())));
+			assignmentRepository.save(new Assignment(user.getId(), "Test Assignment #" + i, "Testing assignment for AssignmentApp", assignmentClass.getId(), dueDate.toEpochDay(), dueDate.toEpochDay()));
 		}
 	}
 }
