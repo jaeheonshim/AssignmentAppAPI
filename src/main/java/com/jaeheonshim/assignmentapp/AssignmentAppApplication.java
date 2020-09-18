@@ -36,7 +36,7 @@ public class AssignmentAppApplication implements CommandLineRunner {
 
 		User user = new User("Jaeheon Shim", "jaeheon287@gmail.com", "$2y$12$rnCEEI.MMZBAYy0tuUSJBubGCH4HKpyG968O8yAhT97XCYfTOBNSK");
 		user.getRoles().add("ADMIN");
-		user.setAccountEnabled(true);
+		user.setAccountEnabled(false);
 		AssignmentClass assignmentClass = new AssignmentClass(0, "Test Class", "John Doe", "#FF0000");
 		user.getAssignmentClasses().add(assignmentClass);
 		repository.save(user);

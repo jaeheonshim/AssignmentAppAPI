@@ -6,6 +6,7 @@ import com.jaeheonshim.assignmentapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -57,6 +58,7 @@ public class AssignmentController {
         Query query = new Query();
         query.with(pageable);
         query.addCriteria(Criteria.where("userId").is(userOptional.get().getId()));
+        query.with(Sort.by(Sort.Direction.ASC, "dueDate"));
 
         if(!Boolean.parseBoolean(showCompleted)) {
             query.addCriteria(Criteria.where("completed").is(false));
@@ -144,6 +146,18 @@ public class AssignmentController {
         Optional<User> userOptional = userRepository.findByEmailAddress(userDetails.getUsername());
 
         if(!userOptional.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        boolean classValid = false;
+        for(AssignmentClass assignmentClass : userOptional.get().getAssignmentClasses()) {
+            if(assignmentClass.getId().equals(assignmentDto.getClassId())) {
+                classValid = true;
+                break;
+            }
+        }
+
+        if(!classValid) {
             return ResponseEntity.badRequest().build();
         }
 

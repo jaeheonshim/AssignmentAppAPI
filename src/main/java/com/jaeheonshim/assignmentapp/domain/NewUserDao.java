@@ -5,6 +5,8 @@ public class NewUserDao {
     private String email;
     private String password;
 
+    private String recaptcha;
+
     public String getName() {
         return name;
     }
@@ -15,5 +17,9 @@ public class NewUserDao {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getRecaptcha() {
+        return recaptcha;
     }
 }

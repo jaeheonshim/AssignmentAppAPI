@@ -41,8 +41,21 @@ public class CreateUserController {
             return ResponseEntity.badRequest().build();
         }
 
+        boolean recaptchaSuccess;
         try {
-            return ResponseEntity.ok(userCreationService.createNewUser(newUser));
+            recaptchaSuccess = userCreationService.checkRecaptcha(newUser.getRecaptcha());
+        } catch(IOException e) {
+            response.put("error", "reCAPTCHA request to Google failed");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        try {
+            if(recaptchaSuccess) {
+                return ResponseEntity.ok(userCreationService.createNewUser(newUser));
+            } else {
+                response.put("error", "reCAPTCHA response invalid");
+                return ResponseEntity.badRequest().body(response);
+            }
         } catch(UserCreationException | IOException e) {
             response.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(response);

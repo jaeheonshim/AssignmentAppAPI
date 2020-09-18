@@ -1,9 +1,12 @@
 package com.jaeheonshim.assignmentapp.service;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jaeheonshim.assignmentapp.UserCreationException;
 import com.jaeheonshim.assignmentapp.domain.NewUserDao;
 import com.jaeheonshim.assignmentapp.domain.User;
 import com.jaeheonshim.assignmentapp.repository.UserRepository;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,5 +61,31 @@ public class UserCreationService {
         emailVerificationService.sendEmailVerifyEmail(user.getName(), user.getEmailAddress());
 
         return userRepository.save(user);
+    }
+
+    public boolean checkRecaptcha(String responseText) throws IOException {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .build();
+
+        if(responseText == null) {
+            return false;
+        }
+
+        RequestBody body = new FormBody.Builder()
+                .add("secret", System.getenv("RECAPTCHA_SECRET"))
+                .add("response", responseText)
+                .build();
+
+        Request request = new Request.Builder()
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .url("https://www.google.com/recaptcha/api/siteverify")
+                .post(body)
+                .build();
+
+        Call call = client.newCall(request);
+        Response response = call.execute();
+
+        JsonObject responseObject = new Gson().fromJson(response.body().string(), JsonObject.class);
+        return responseObject.get("success").getAsString().equalsIgnoreCase("true");
     }
 }
